@@ -8,10 +8,13 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.sql.*;
+import com.mysql.jdbc.PreparedStatement;
+import hello.Connection;
 public class Principal {
 	static File f;
 	static List<Articulo> articulos = new ArrayList<Articulo>();
+	static String query ;
 
 	public static void main(String[] args) {
 		// Conexion a base de datos
@@ -24,8 +27,31 @@ public class Principal {
 	private static void update() {
 		int i=0;
 		for(Articulo x : articulos) {
-			String query = "update articulos set categoria_id=(select id from categorias where categoria_en = '"+x.categoria+"') where referencia = '"+x.referencia+"')'";
+			//query = "update articulos set categoria_id=(select id from categorias where categoria_en = '"+x.categoria+"') where referencia = '"+x.referencia+"')'";
+			query = "update articulos set categoria_id=(select id from categorias where categoria_en = ?) where referencia = ?";
+			try {
+				PreparedStatement preparedStmt = (PreparedStatement) Connection.connection.prepareStatement(query);
+				preparedStmt.setString(1, x.categoria);
+				preparedStmt.setString(2, x.referencia);
+				preparedStmt.executeUpdate();
+				
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
 		}
+		try {
+			Connection.connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	      
+
 		
 	}
 

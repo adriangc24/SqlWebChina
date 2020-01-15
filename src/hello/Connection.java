@@ -3,7 +3,7 @@ package hello;
 import java.sql.*;
 
 public class Connection implements ConnectionJDBC {
-	private static java.sql.Connection connection;
+	public static java.sql.Connection connection;
 
 	public static void conexionJDBC() {
 	try {
